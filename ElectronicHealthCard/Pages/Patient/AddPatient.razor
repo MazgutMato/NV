@@ -1,0 +1,73 @@
+﻿@page "/patientForm"
+@inject PatientsController patientController
+
+<PageTitle>AddPatient</PageTitle>
+
+<EditForm Model="@Patient" OnValidSubmit="@PatientFormSubmit">
+    <DataAnnotationsValidator />
+    <h3>Add Patient</h3>
+    <hr />
+    <div class="form-group mb-2">
+        <label for="firstName">
+            First Name
+        </label>
+        <div>
+            <InputText id="firstName" class="form-control" placeholder="First Name"
+                       @bind-Value="Patient.FirstName" />
+            <ValidationMessage For="@(() => Patient.FirstName)" />
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="lastName">
+            Last Name
+        </label>
+        <div>
+            <InputText id="lastName" class="form-control" placeholder="Last Name"
+                       @bind-Value="Patient.LastName" />
+            <ValidationMessage For="@(() => Patient.LastName)" />
+        </div>
+    </div>
+    <div class="form-group row mb-2">
+        <label for="patientId">
+            PatientID
+        </label>
+        <div>
+            <InputText id="patientId" class="form-control" placeholder="Patient Id"
+                       @bind-Value="Patient.PatientId" />
+            <ValidationMessage For="@(() => Patient.PatientId)" />
+        </div>
+    </div>
+    <div class="form-group row mb-2">
+        <label for="birthDate">
+            Birth Date
+        </label>
+        <div>
+            <InputDate id="birthDate" class="form-control" placeholder="Birth Date"
+                       @bind-Value="Patient.BirthDate" />
+        </div>
+    </div>
+    <div>
+        <button type="submit" class="btn btn-primary">Add</button>
+    </div>
+     @if(Message != null){
+        <p>@Message</p>
+     }
+</EditForm>
+
+@code {
+    public Patient Patient { get; set; } = new Patient();
+    public string? Message { get; set; }
+
+    public void PatientFormSubmit()
+    {
+        if (patientController.AddPatient(new Patient(this.Patient.PatientId, this.Patient.FirstName, 
+            this.Patient.LastName, this.Patient.BirthDate)))
+        {
+            Message = "Successfuly added!";
+        }
+        else
+        {
+            Message = "Patient already exists!";
+        }
+    }
+}

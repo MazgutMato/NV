@@ -1,0 +1,46 @@
+﻿@page "/patients"
+@inject PatientsController patientsController
+
+<PageTitle>Patients</PageTitle>
+
+<h3>All patients</h3>
+<hr />
+
+<table class="table">
+    <thead>
+        <tr>
+            <th style="width:40px"></th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Patient ID</th>
+            <th>Birth Date</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (this.PatientsIterator != null)
+        {
+            var number = 1;
+            @while (this.PatientsIterator.HasNext())
+            {
+                var patient = this.PatientsIterator.MoveNext();
+                <tr>
+                    <th>@number</th>
+                    <td>@patient.FirstName</td>
+                    <td>@patient.LastName</td>
+                    <td>@patient.PatientId</td>
+                    <td>@patient.BirthDate</td>
+                </tr>
+                number++;
+            }
+        }     
+    </tbody>
+</table>
+
+@code {
+    private Iterator<Patient>? PatientsIterator;
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        this.PatientsIterator = patientsController.GetPatients();
+    }
+}

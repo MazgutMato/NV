@@ -1,0 +1,23 @@
+﻿@page "/"
+@inject PatientsController patients
+
+<PageTitle>ElectronicHelathCard</PageTitle>
+<h3>Save data</h3>
+<hr />
+
+<h3 class="mt-2">Load data</h3>
+<hr />
+
+@if (Message != null)
+{
+    <p>@Message</p>
+}
+
+
+@code
+{
+    [Inject] IBlazorDownloadFileService BlazorDownloadFileService { get; set; }
+    private string FileName = "";
+    private string Message;
+
+}
