@@ -1,5 +1,5 @@
 ﻿using DataStructures.Iterator;
-using DataStructures.Tree.BSTree;
+using DataStructures.Tree.Binary;
 using ElectronicHealthCard.Models;
 
 namespace ElectronicHealthCard.Controllers
@@ -14,10 +14,6 @@ namespace ElectronicHealthCard.Controllers
         public bool AddPatient(Patient patient)
         {
             return Patients.Add(patient);
-        }
-        public bool AddPatients(List<Patient> patients)
-        {
-            return this.Patients.FillWithMedian(patients);
         }
         public int GetCount()
         {

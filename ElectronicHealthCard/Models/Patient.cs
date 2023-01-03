@@ -1,4 +1,4 @@
-﻿using DataStructures.Tree.BSTree;
+﻿using DataStructures.Tree.Binary;
 using ElectronicHealthCard.Pages.Patient;
 using System.ComponentModel.DataAnnotations;
 
