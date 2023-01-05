@@ -81,14 +81,16 @@
             Message = "Select structure!";
             return;
         }
+        System.Users = TableFactory<AUser>.createTable(appCore.StructureType);
         if (appCore.Systems.Add(System))
         {
             Message = "Successfuly added!";
+            this.System = appCore.Factory.CreateSystem();
             return;
         }
         else
         {
-            Message = "Hospital already exists!";
+            Message = "Hospital already exists!";            
             return;
         }
     }

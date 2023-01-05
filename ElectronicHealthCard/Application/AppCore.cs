@@ -7,7 +7,7 @@ using ElectronicHealthCard.Application.Hospital;
 
 namespace ElectronicHealthCard.Application
 {
-    public class TableFactory<T> where T : IComparable<T>
+    public static class TableFactory<T> where T : IComparable<T>
     {
         public static Table<T>? createTable(int type)
         {

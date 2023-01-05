@@ -10,9 +10,13 @@ namespace ElectronicHealthCard.Application.AbstractFactory
         [Required]
         public int Capacity { get; set; }
         public Table<AUser>? Users { get; set; }
-        public bool AdmitUser(AUser user)
+        public bool AddUser(AUser user)
         {
             return this.Users.Add(user);
+        }
+        public bool RemoveUser(AUser user)
+        {
+            return this.Users.Delete(user);
         }
         public int CompareTo(ASystem? other)
         {

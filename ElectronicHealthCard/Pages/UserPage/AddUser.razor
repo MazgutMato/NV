@@ -1,0 +1,108 @@
+﻿@page "/AddUser"
+@inject AppCore appCore
+
+<h3>
+    @if (appCore.Factory is HospitalFactory)
+    {
+        <p>Add Patient</p>
+    }
+    else
+    {
+        <p>Add User</p>
+    }
+</h3>
+<hr />
+
+<EditForm Model="@User" OnValidSubmit="@FormSubmit">
+    <DataAnnotationsValidator />
+    <div class="form-group">
+        <label for="id">
+            Id
+        </label>
+        <div>
+            <InputText id="id" class="form-control" placeholder="Id"
+                       @bind-Value="User.Id" />
+            <ValidationMessage For="@(() => User.Id)" />
+        </div>
+
+        <label for="firstName">
+            FirstName
+        </label>
+        <div>
+            <InputText id="firstName" class="form-control" placeholder="firstName"
+                       @bind-Value="User.FirstName" />
+            <ValidationMessage For="@(() => User.FirstName)" />
+        </div>
+
+        <label for="lastName">
+            LastName
+        </label>
+        <div>
+            <InputText id="lastName" class="form-control" placeholder="lastName"
+                       @bind-Value="User.LastName" />
+            <ValidationMessage For="@(() => User.LastName)" />
+        </div>
+
+        <label for="birth">
+            Birth date
+        </label>
+        <div>
+            <InputDate id="birth" class="form-control" placeholder="birth"
+                       @bind-Value="User.BirthDate" />
+            <ValidationMessage For="@(() => User.BirthDate)" />
+        </div>
+
+        @if (appCore.Factory is HospitalFactory)
+        {
+            <label for="insurance">
+                Insurance
+            </label>
+            <div>
+                <InputText id="insurance" class="form-control" placeholder="Insurance"
+                         @bind-Value="((Patient)User).Insurance" />
+                <ValidationMessage For="@(() => ((Patient)User).Insurance)" />
+            </div>
+        }
+    </div>
+    <div class="mt-2">
+        <button type="submit" class="btn btn-primary">
+            Add
+        </button>
+    </div>
+    @if (Message != null)
+    {
+        <p>@Message</p>
+    }
+</EditForm>
+
+@code {
+    public AUser? User { get; set; } = null;
+    public string? Message { get; set; } = null;
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+
+        this.User = appCore.Factory.CreateUser();
+    }
+
+    public void FormSubmit()
+    {
+        if (appCore.Users == null)
+        {
+            Message = "Select structure!";
+            return;
+        }
+        if (appCore.Users.Add(User))
+        {
+            Message = "Successfuly added!";
+            this.User = appCore.Factory.CreateUser();
+            return;
+        }
+        else
+        {
+            Message = "Hospital already exists!";
+            return;
+        }
+    }
+}
