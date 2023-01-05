@@ -1,4 +1,4 @@
-﻿@page "/systems"
+﻿@page "/Systems"
 @inject AppCore appCore
 
 <h3>
@@ -27,7 +27,7 @@
         </tr>
     </thead>
     <tbody>
-        @if (appCore.Systems.Count > 0)
+        @if (this.SystemsIterator is not null)
         {
             var number = 1;
             @while (this.SystemsIterator.HasNext())
@@ -50,14 +50,16 @@
 </table>
 
 @code {
-    private Iterator<ASystem> SystemsIterator;
+    private Iterator<ASystem>? SystemsIterator;
 
     #region Overrides of ComponentBase
 
     protected override void OnInitialized()
     {
         base.OnInitialized();
-        this.SystemsIterator = this.appCore.Systems.createIterator();
+        if (this.appCore.Systems is not null){
+            this.SystemsIterator = this.appCore.Systems.createIterator();
+        }        
     }
 
     #endregion
