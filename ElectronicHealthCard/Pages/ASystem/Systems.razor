@@ -1,0 +1,64 @@
+﻿@page "/systems"
+@inject AppCore appCore
+
+<h3>
+    @if (appCore.Factory is HospitalFactory)
+    {
+        <p>Hospitals</p>
+    }
+    else
+    {
+        <p>Systems</p>
+    }
+</h3>
+<hr />
+
+<table class="table">
+    <thead>
+        <tr>
+            <th style="width:40px"></th>
+            <th>Name</th>
+            <th>Capacity</th>
+            @if (appCore.Factory is HospitalFactory)
+            {
+                <th>Doctors</th>
+                <th>Nurses</th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @if (appCore.Systems.Count > 0)
+        {
+            var number = 1;
+            @while (this.SystemsIterator.HasNext())
+            {
+                var system = this.SystemsIterator.MoveNext();
+                <tr>
+                    <th>@number</th>
+                    <td>@system.Name</td>
+                    <td>@system.Capacity</td>
+                    @if (appCore.Factory is HospitalFactory)
+                    {
+                        <td>@(((Hospital)system).Doctors)</td>
+                        <td>@(((Hospital)system).Nurses)</td>
+                    }
+                </tr>
+                number++;
+            }
+        }
+    </tbody>
+</table>
+
+@code {
+    private Iterator<ASystem> SystemsIterator;
+
+    #region Overrides of ComponentBase
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        this.SystemsIterator = this.appCore.Systems.createIterator();
+    }
+
+    #endregion
+}

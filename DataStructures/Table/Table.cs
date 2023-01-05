@@ -10,6 +10,7 @@ namespace DataStructures.Table
 {
     public abstract class Table<T> : Iterable<T> where T : IComparable<T>
     {
+        public int Count { get; set; }
         public abstract bool Add(T data);
         public abstract bool Delete(T data);
         public abstract T? Find(T data);

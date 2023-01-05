@@ -1,4 +1,6 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
+﻿@inject AppCore appCore
+
+<div class="top-row ps-3 navbar navbar-dark">
     <div class="container-fluid">
         <a class="navbar-brand" href="">ElectronicHealthCard</a>
         <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
@@ -15,9 +17,16 @@
             </NavLink>       
         </div>
         <div class="nav-item px-1">
-                <NavLink class="nav-link" href="patients">
-                    <span class="oi oi-list-rich" aria-hidden="true"></span> Patients
-                </NavLink>
+                <NavLink class="nav-link" href="systems">
+                    <span class="oi oi-list-rich" aria-hidden="true"></span> 
+                @if(appCore.Factory is HospitalFactory)
+                {
+                    <span>Hospitals</span>
+                } else
+                {
+                    <p>Systems</p>
+                }
+            </NavLink>
             <ul class="mt-1">
                 <li>
                     <NavLink class="nav-link" href="patientForm">

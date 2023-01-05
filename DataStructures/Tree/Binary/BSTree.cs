@@ -12,7 +12,6 @@ namespace DataStructures.Tree.Binary
     public class BSTree<T> : Table<T> where T : IComparable<T>
     {
         public BSTNode<T>? Root { get; set; }
-        public int Count { get; set; }
         public override Iterator<T> createIterator()
         {
             return new InOrderBSTIterator<T>(this);
