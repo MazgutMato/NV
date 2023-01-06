@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using DataStructures.Table;
+using System.ComponentModel.DataAnnotations;
 
 namespace ElectronicHealthCard.Application.AbstractFactory
 {

@@ -1,0 +1,104 @@
+﻿@page "/AddUser"
+@inject AppCore appCore
+
+<h3>
+    @if (appCore.Factory is HospitalFactory)
+    {
+        <p>Add Patient</p>
+    }
+    else
+    {
+        <p>Add User</p>
+    }
+</h3>
+<hr />
+
+<EditForm Model="@System">
+    <DataAnnotationsValidator />
+    <div class="form-group">
+        <label for="name">
+            @if (appCore.Factory is HospitalFactory)
+            {
+                <p>Hospital Name</p>
+            }
+            else
+            {
+                <p>Other Name</p>
+            }
+        </label>
+        <div>
+            <InputText id="name" class="form-control" placeholder="Name"
+                       @bind-Value="System.Name" />
+            <ValidationMessage For="@(() => System.Name)" />
+        </div>
+    </div>
+</EditForm>
+
+<EditForm Model="@User">
+    <DataAnnotationsValidator />
+    <div class="form-group">
+        <label for="id">
+            @if (appCore.Factory is HospitalFactory)
+            {
+                <p>Patient Id</p>
+            }
+            else
+            {
+                <p>Othet Id</p>
+            }
+        </label>
+        <div>
+            <InputText id="id" class="form-control" placeholder="Id"
+                       @bind-Value="User.Id" />
+            <ValidationMessage For="@(() => User.Id)" />
+        </div>
+    </div>
+</EditForm>
+
+<div class="mt-2">
+    <button class="btn btn-primary" @onclick="SubmitForm">
+        Add
+    </button>
+</div>
+
+@if (Message != null)
+{
+    <p>@Message</p>
+}
+
+@code {
+    private ASystem System { get; set; }
+    private AUser User { get; set; }
+    private string Message { get; set; } = null;
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+
+        System = appCore.Factory.CreateSystem();
+        User = appCore.Factory.CreateUser();
+    }
+
+    private void SubmitForm()
+    {
+        var FindSystem = appCore.Systems.Find(System);
+        if (FindSystem == null)
+        {
+            Message = "Hospital not found!";
+            return;
+        }
+
+        var FindUser = appCore.Users.Find(User);
+        if (FindUser == null)
+        {
+            Message = "Patient not found!";
+            return;
+        }
+
+        if (FindSystem.Users.Add(FindUser))
+        {
+            Message = "Patient successfully hospitalized!";
+            return;
+        }
+    }
+}

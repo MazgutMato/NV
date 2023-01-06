@@ -6,6 +6,5 @@ namespace ElectronicHealthCard.Application.AbstractFactory
     {
         public abstract ASystem CreateSystem();
         public abstract AUser CreateUser();
-        public abstract ARecord CreateRecord();
     }
 }
