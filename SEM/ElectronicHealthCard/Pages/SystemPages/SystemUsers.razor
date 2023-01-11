@@ -1,0 +1,116 @@
+﻿@page "/SystemUsers"
+@inject AppCore appCore
+
+<h3>
+    @if (appCore.Factory is HospitalFactory)
+    {
+        <p>Search hospitalized patients</p>
+    }
+    else
+    {
+        <p>Search other</p>
+    }
+</h3>
+<hr />
+
+<EditForm Model="@System" OnValidSubmit="@FormSubmit">
+    <DataAnnotationsValidator />
+    <div class="form-group mb-2">
+        <div class="row">
+            <label for="firstName">
+                @if (appCore.Factory is HospitalFactory)
+                {
+                    <p>Hospital name</p>
+                }
+                else
+                {
+                    <p>Other name</p>
+                }
+            </label>
+            <div class="col">
+                <InputText id="name" class="form-control" placeholder="Name"
+                           @bind-Value="System.Name" />
+                <ValidationMessage For="@(() => System.Name)" />
+            </div>
+            <div class="col">
+                <button type="submit" class="btn btn-primary">
+                    Search
+                </button>
+            </div>
+        </div>
+    </div>
+    @if (Message != null)
+    {
+        <Alert Message="@Message"/>
+    }
+</EditForm>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th style="width:40px"></th>
+            <th>Id</th>
+            <th>FirstName</th>
+            <th>LastName</th>
+            <th>BirthDate</th>
+            @if (appCore.Factory is HospitalFactory)
+            {
+                <th>Insurance</th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @if (this.UsersIterator is not null)
+        {
+            var number = 1;
+            @while (this.UsersIterator.HasNext())
+            {
+                var user = this.UsersIterator.MoveNext();
+                <tr>
+                    <th>@number</th>
+                    <td>@user.Id</td>
+                    <td>@user.FirstName</td>
+                    <td>@user.LastName</td>
+                    <td>@user.BirthDate</td>
+                    @if (appCore.Factory is HospitalFactory)
+                    {
+                        <td>@(((Patient)user).Insurance)</td>
+                    }
+                </tr>
+                number++;
+            }
+        }
+    </tbody>
+</table>
+
+@code {
+    private Iterator<AUser> UsersIterator;
+    private ASystem System;
+    private string Message;
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+
+        this.System = appCore.Factory.CreateSystem();
+    }
+
+    private void FormSubmit()
+    {
+        if (appCore.Systems == null)
+        {
+            Message = "Select structure!";
+            return;
+        }
+        var findSystem = appCore.Systems.Find(System);
+        if (findSystem != null)
+        {
+            this.UsersIterator = findSystem.Users.createIterator();
+            Message = "Patients successfully displayed!";
+        }
+        else
+        {
+            Message = "Hospital not found!";
+        }
+    }
+}

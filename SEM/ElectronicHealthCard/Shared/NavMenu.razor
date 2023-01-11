@@ -1,0 +1,76 @@
+﻿@inject AppCore appCore
+
+<div class="top-row ps-3 navbar navbar-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="">ElectronicHealthCard</a>
+        <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+    </div>
+</div>
+
+<div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
+    <nav class="flex-column">
+        <div class="nav-item px-1">
+            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
+                <span class="oi oi-home" aria-hidden="true"></span> Home
+            </NavLink>
+        </div>
+        <div class="nav-item px-1">
+            <NavLink class="nav-link" href="Systems">
+                <span class="oi oi-list-rich" aria-hidden="true"></span>
+                @if (appCore.Factory is HospitalFactory)
+                {
+                    <span>Hospitals</span>
+                }
+                else
+                {
+                    <p>Systems</p>
+                }
+            </NavLink>
+            <ul class="mt-1">
+                <NavLink class="nav-link" href="CreateSystem">
+                    <span class="oi oi-plus"></span> Create
+                </NavLink>
+                <NavLink class="nav-link" href="AddUser">
+                    <span class="oi oi-plus"></span> Add Patient
+                </NavLink>
+                <NavLink class="nav-link" href="RemoveUser">
+                    <span class="oi oi-plus"></span> Remove Patient
+                </NavLink>
+                <NavLink class="nav-link" href="SystemUsers">
+                    <span class="oi oi-plus"></span> Patients
+                </NavLink>
+            </ul>
+        </div>
+        <div class="nav-item px-1">
+            <NavLink class="nav-link" href="Users">
+                <span class="oi oi-list-rich" aria-hidden="true"></span>
+                @if (appCore.Factory is HospitalFactory)
+                {
+                    <span>Patients</span>
+                }
+                else
+                {
+                    <p>Users</p>
+                }
+            </NavLink>
+            <ul class="mt-1">
+                <NavLink class="nav-link" href="CreateUser">
+                    <span class="oi oi-plus"></span> Create
+                </NavLink>
+            </ul>
+        </div>
+    </nav>
+</div>
+
+@code {
+    private bool collapseNavMenu = true;
+
+    private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+
+    private void ToggleNavMenu()
+    {
+        collapseNavMenu = !collapseNavMenu;
+    }
+}

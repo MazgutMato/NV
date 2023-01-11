@@ -1,0 +1,98 @@
+﻿@page "/CreateSystem"
+@inject AppCore appCore
+
+<h3>
+    @if (appCore.Factory is HospitalFactory)
+    {
+        <p>Add Hospital</p>
+    }
+    else
+    {
+        <p>Add System</p>
+    }
+</h3>
+<hr />
+
+<EditForm Model="@System" OnValidSubmit="@FormSubmit">
+    <DataAnnotationsValidator />
+    <div class="form-group">
+        <label for="name">
+            Name
+        </label>
+        <div>
+            <InputText id="name" class="form-control" placeholder="Name"
+                       @bind-Value="System.Name" />
+            <ValidationMessage For="@(() => System.Name)" />
+        </div>
+
+        <label for="capacity">
+            Capacity
+        </label>
+        <div>
+            <InputNumber id="capacity" class="form-control" placeholder="Capacity"
+                       @bind-Value="System.Capacity" />
+            <ValidationMessage For="@(() => System.Capacity)" />
+        </div>
+
+        @if(appCore.Factory is HospitalFactory){
+            <label for="doctors">
+                Doctors
+            </label>
+            <div>
+                <InputNumber id="doctors" class="form-control" placeholder="Doctors"
+                         @bind-Value="((Hospital)System).Doctors" />
+                <ValidationMessage For="@(() => ((Hospital)System).Doctors)" />
+            </div>
+
+            <label for="nurses">
+                Nurses
+            </label>
+            <div>
+                <InputNumber id="nurses" class="form-control" placeholder="Nurses"
+                         @bind-Value="((Hospital)System).Nurses" />
+                <ValidationMessage For="@(() => ((Hospital)System).Nurses)" />
+            </div>
+        }
+    </div>
+    <div class="mt-2">
+        <button type="submit" class="btn btn-primary">
+            Add
+        </button>
+    </div>
+</EditForm>
+
+@if (Message != null)
+{
+    <Alert Message="@Message" />
+}
+
+@code {
+    public ASystem? System { get; set; } = null;
+    public string? Message { get; set; } = null;
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+
+        this.System = appCore.Factory.CreateSystem();
+    }
+
+    public void FormSubmit(){
+        if(appCore.Systems == null){
+            Message = "Select structure!";
+            return;
+        }
+        System.Users = TableFactory<AUser>.createTable(appCore.StructureType);
+        if (appCore.Systems.Add(System))
+        {
+            Message = "Successfuly added!";
+            this.System = appCore.Factory.CreateSystem();
+            return;
+        }
+        else
+        {
+            Message = "Hospital already exists!";            
+            return;
+        }
+    }
+}
